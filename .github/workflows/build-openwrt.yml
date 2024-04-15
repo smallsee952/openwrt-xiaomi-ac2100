@@ -299,6 +299,19 @@ jobs:
           df -hT ${PWD}
           echo "status=success" >> ${GITHUB_OUTPUT}
 
+      - name: Clone DIY
+        id: clonediy
+        working-directory: ${{ env.path_openwrt }}
+        if: ${{ steps.disk.outputs.status }} == 'success' && !cancelled()
+        run: |
+          echo -e "Current working directory: $(pwd)"
+
+          git clone ${repo_diy} ${path_diy} --single-branch --depth=1 --branch=main
+          echo -e "repo_diy: [ ${repo_diy} ]\nBRANCH: [ main ]"
+
+          df -hT ${PWD}
+          echo "status=success" >> ${GITHUB_OUTPUT}
+
       - name: (feeds.conf.default) Load custom feeds
         working-directory: ${{ env.path_openwrt }}
         run: |
