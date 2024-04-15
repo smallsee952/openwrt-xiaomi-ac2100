@@ -452,6 +452,14 @@ jobs:
 
           rm -rf packages
 
+          # for file in *.bin
+          # do
+          #   if [[ ! -d "${file}" ]]
+          #   then
+          #     sha256sum "${file}" > "${file}.sha"
+          #   fi
+          # done
+
           echo -e "timestamp=$(date +"%y%mw%V")" >> ${GITHUB_OUTPUT}
           echo "status=success" >> ${GITHUB_OUTPUT}
 
@@ -522,6 +530,10 @@ jobs:
             echo -e "\n</details>" >> ${release_md}
           fi
 
+          # 切换到Output目录
+          # cd ${path_output}
+          # echo -e "Current working directory: $(pwd)"
+
           # 记录Output bin文件
           echo -e "\n### Tested or NOT\n\n" >> ${release_md}
           for file in ${path_output}/*.bin
@@ -532,12 +544,20 @@ jobs:
             fi
           done
 
+          # 将仓库 URL 写入到 GITHUB_OUTPUT 环境变量指定的文件中
+          # echo "TAGS_NAME=${TAGS_NAME}" >> ${GITHUB_OUTPUT}
+          # Set output information 将构建标签和日期信息写入到 GITHUB_OUTPUT 环境变量指定的文件中
+
+          # echo -e "record=${release_md}" >> ${GITHUB_OUTPUT}
+
       # https://github.com/ncipollo/release-action/blob/main/README.zh-Hans.md
       - name: Upload OpenWrt to Release
         uses: ncipollo/release-action@main
         if: ${{ steps.output.outputs.status }} == 'success' && !cancelled()
         env:
+          # device_branch: ${{ inputs.device_branch }}
           timestamp: ${{ steps.output.outputs.timestamp }}
+          # release_md: ${{ steps.record.outputs.record }}
         with:
           name: "${{ env.openwrt_branch }}_${{ env.device_branch }}_${{ env.timestamp }}"
           tag: "${{ env.openwrt_branch }};${{ env.repo_openwrt_branch }}"
