@@ -1,2 +1,2 @@
-# openwrt-xiaomi-ax3000t
-OpenWrt for Xiaomi Mi Router AX3000T with Actions
+# openwrt-xiaomi-ac2100
+OpenWrt for Xiaomi Mi Router ac2100 with Actions
